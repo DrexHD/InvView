@@ -7,17 +7,9 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.GameProfileArgumentType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Util;
-import net.minecraft.util.WorldSavePath;
-import org.apache.logging.log4j.LogManager;
-
-import java.io.File;
 
 public class InvView implements ModInitializer {
     private static MinecraftServer minecraftServer;
@@ -89,17 +81,4 @@ public class InvView implements ModInitializer {
         return minecraftServer;
     }
 
-    public static void savePlayerData(ServerPlayerEntity player) {
-        File playerDataDir = minecraftServer.getSavePath(WorldSavePath.PLAYERDATA).toFile();
-        try {
-            NbtCompound compoundTag = player.writeNbt(new NbtCompound());
-            File file = File.createTempFile(player.getUuidAsString() + "-", ".dat", playerDataDir);
-            NbtIo.writeCompressed(compoundTag, file);
-            File file2 = new File(playerDataDir, player.getUuidAsString() + ".dat");
-            File file3 = new File(playerDataDir, player.getUuidAsString() + ".dat_old");
-            Util.backupAndReplace(file2, file, file3);
-        } catch (Exception var6) {
-            LogManager.getLogger().warn("Failed to save player data for {}", player.getName().getString());
-        }
-    }
 }

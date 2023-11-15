@@ -4,6 +4,7 @@ import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import us.potatoboy.invview.InvView;
+import us.potatoboy.invview.mixin.PlayerManagerAccessor;
 
 public class SavingPlayerDataGui extends SimpleGui {
     private final ServerPlayerEntity savedPlayer;
@@ -21,6 +22,6 @@ public class SavingPlayerDataGui extends SimpleGui {
 
     @Override
     public void onClose() {
-        InvView.savePlayerData(savedPlayer);
+        ((PlayerManagerAccessor) InvView.getMinecraftServer().getPlayerManager()).getSaveHandler().savePlayerData(savedPlayer);
     }
 }
